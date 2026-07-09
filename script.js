@@ -1,108 +1,84 @@
-/* ============================================================
-   CUSTOMER DATA
-   Edit only this object to create a new profile.
-   - whatsapp: phone number in international format, digits only
-               (e.g. "201500068841"), no "+" or spaces.
-   - instapay: either a full InstaPay link ("https://...")
-               or just a username/handle (e.g. "@johndoe").
-               If it's a link, the button opens it directly.
-               If it's not a link, the button copies it to the clipboard.
-   - Facebook, instigram, X, tiktok: full profile links.
-   - image: URL or relative path to the profile picture.
-============================================================ */
-const customer = {
-  name: "bASEL Elsohaby",
-  job: "Founder",
-  whatsapp: "01003232820",
-  instapay: "https://ipn.eg/S/abdelrahman_elsohaby/instapay/4myqnA",
-  Facebook: "https://www.facebook.com/share/18irmzwFqu/?mibextid=wwXIfr",
-  instigram: "https://www.instagram.com/baselelsohaby?utm_source=qr",
-  tiktok: "https://vt.tiktok.com/ZSCw3UNmw/",
-  X: "https://x.com/donateello?s=21",
-  image: "D:\\files (1)\\2025_08_15_03_01_IMG_7384.JPG",
+const params = new URLSearchParams(window.location.search);
+const id = params.get("id") || "abdelrahman";
+
+let currentLang = "ar";
+
+const text = {
+  ar: {
+    whatsapp: "واتساب",
+    instapay: "إنستا باي",
+    facebook: "فيسبوك",
+    instagram: "إنستجرام",
+    tiktok: "تيك توك",
+    x: "X",
+    maps: "الموقع على الخريطة",
+    qr: "امسح QR Code",
+    langBtn: "EN"
+  },
+  en: {
+    whatsapp: "WhatsApp",
+    instapay: "InstaPay",
+    facebook: "Facebook",
+    instagram: "Instagram",
+    tiktok: "TikTok",
+    x: "X",
+    maps: "Google Maps",
+    qr: "Scan QR Code",
+    langBtn: "AR"
+  }
 };
 
-/* ============================================================
-   RENDER LOGIC — no need to edit below this line
-============================================================ */
-(function renderProfile() {
-  const nameEl = document.getElementById("name");
-  const jobEl = document.getElementById("job");
-  const avatarEl = document.getElementById("avatar");
-  const instapayLabelEl = document.getElementById("instapayLabel");
+fetch(`data/${id}.json`)
+  .then(res => res.json())
+  .then(customer => {
+    document.documentElement.dir = "rtl";
+    document.documentElement.lang = "ar";
 
-  nameEl.textContent = customer.name || "";
-  jobEl.textContent = customer.job || "";
-  avatarEl.src = customer.image || "";
-  avatarEl.alt = customer.name ? `${customer.name}'s profile picture` : "Profile picture";
+    document.body.style.setProperty("--primary", customer.themeColor || "#111111");
 
-  const isInstapayLink = /^https?:\/\//i.test(customer.instapay || "");
-  instapayLabelEl.textContent = isInstapayLink ? "InstaPay" : "InstaPay · Copy Username";
-})();
+    document.getElementById("profileImage").src = customer.image;
+    document.getElementById("customerName").textContent = customer.name;
+    document.getElementById("customerJob").textContent = customer.job;
 
-/* Helper: open a link in a new tab if it exists */
-function openLink(url) {
-  if (!url) return;
-  window.open(url, "_blank", "noopener,noreferrer");
+    document.getElementById("whatsappBtn").href = customer.whatsapp;
+    document.getElementById("instapayBtn").href = customer.instapay;
+    document.getElementById("facebookBtn").href = customer.facebook;
+    document.getElementById("instagramBtn").href = customer.instagram;
+    document.getElementById("tiktokBtn").href = customer.tiktok;
+    document.getElementById("xBtn").href = customer.x;
+    document.getElementById("mapsBtn").href = customer.maps;
+
+    const profileUrl = window.location.href;
+    document.getElementById("qrImage").src =
+      `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(profileUrl)}`;
+
+    updateLanguage();
+  });
+
+function updateLanguage() {
+  const t = text[currentLang];
+
+  document.getElementById("whatsappBtn").textContent = t.whatsapp;
+  document.getElementById("instapayBtn").textContent = t.instapay;
+  document.getElementById("facebookBtn").textContent = t.facebook;
+  document.getElementById("instagramBtn").textContent = t.instagram;
+  document.getElementById("tiktokBtn").textContent = t.tiktok;
+  document.getElementById("xBtn").textContent = t.x;
+  document.getElementById("mapsBtn").textContent = t.maps;
+  document.getElementById("qrTitle").textContent = t.qr;
+  document.getElementById("langBtn").textContent = t.langBtn;
+
+  document.documentElement.lang = currentLang;
+  document.documentElement.dir = currentLang === "ar" ? "rtl" : "ltr";
 }
 
-/* WhatsApp button: opens a chat with the stored number */
-document.getElementById("whatsappBtn").addEventListener("click", function () {
-  const digits = (customer.whatsapp || "").replace(/[^0-9]/g, "");
-  if (!digits) return;
-  openLink(`https://wa.me/${digits}`);
+document.getElementById("langBtn").addEventListener("click", () => {
+  currentLang = currentLang === "ar" ? "en" : "ar";
+  updateLanguage();
 });
 
-/* InstaPay button: opens the link if provided, otherwise copies the username */
-document.getElementById("instapayBtn").addEventListener("click", async function () {
-  const value = customer.instapay || "";
-  const isLink = /^https?:\/\//i.test(value);
-
-  if (isLink) {
-    openLink(value);
-    return;
-  }
-
-  try {
-    await navigator.clipboard.writeText(value);
-    showToast("Username copied!");
-  } catch (err) {
-    const tempInput = document.createElement("input");
-    tempInput.value = value;
-    document.body.appendChild(tempInput);
-    tempInput.select();
-    document.execCommand("copy");
-    document.body.removeChild(tempInput);
-    showToast("Username copied!");
-  }
+document.getElementById("modeBtn").addEventListener("click", () => {
+  document.body.classList.toggle("dark");
+  document.getElementById("modeBtn").textContent =
+    document.body.classList.contains("dark") ? "☀️" : "🌙";
 });
-
-/* Social buttons: simply open the stored links */
-document.getElementById("facebookBtn").addEventListener("click", function () {
-  openLink(customer.Facebook);
-});
-
-document.getElementById("instagramBtn").addEventListener("click", function () {
-  openLink(customer.instigram);
-});
-
-document.getElementById("tiktokBtn").addEventListener("click", function () {
-  openLink(customer.tiktok);
-});
-
-document.getElementById("xBtn").addEventListener("click", function () {
-  openLink(customer.X);
-});
-
-/* Small toast feedback for the copy action */
-let toastTimer = null;
-function showToast(message) {
-  const toast = document.getElementById("toast");
-  toast.textContent = message;
-  toast.classList.add("show");
-
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => {
-    toast.classList.remove("show");
-  }, 1800);
-}
