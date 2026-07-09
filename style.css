@@ -1,250 +1,124 @@
-:root {
-  --bg: #ffffff;
-  --surface: #ffffff;
-  --text-primary: #14181f;
-  --text-secondary: #6b7280;
-  --border: #eef0f3;
-  --shadow: 0 10px 30px rgba(20, 24, 31, 0.08);
-
-  --whatsapp: #25d366;
-  --whatsapp-dark: #1ebc59;
-
-  --instapay: #6c47ff;
-  --instapay-dark: #5a37e6;
-
-  --facebook: #1877f2;
-  --facebook-dark: #1461d1;
-
-  --instagram-1: #f58529;
-  --instagram-2: #dd2a7b;
-  --instagram-3: #8134af;
-  --instagram-4: #515bd4;
-
-  --tiktok: #000000;
-  --tiktok-dark: #1a1a1a;
-  --tiktok-accent: #25f4ee;
-  --tiktok-accent2: #fe2c55;
-
-  --x: #000000;
-  --x-dark: #222222;
-
-  --radius-lg: 28px;
-  --radius-md: 18px;
-}
-
 * {
+  margin: 0;
+  padding: 0;
   box-sizing: border-box;
+  font-family: Arial, sans-serif;
 }
 
-html, body {
-  height: 100%;
+:root {
+  --bg: #f5f5f5;
+  --card: #ffffff;
+  --text: #111111;
+  --muted: #666666;
+  --primary: #111111;
+}
+
+body.dark {
+  --bg: #111111;
+  --card: #1c1c1c;
+  --text: #ffffff;
+  --muted: #bbbbbb;
 }
 
 body {
-  margin: 0;
   min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
   background: var(--bg);
-  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  color: var(--text-primary);
-  padding: 24px;
-}
-
-.card {
-  width: 100%;
-  max-width: 380px;
-  background: var(--surface);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow);
-  padding: 40px 28px 32px;
   display: flex;
-  flex-direction: column;
+  justify-content: center;
   align-items: center;
+  padding: 20px;
+  transition: 0.3s;
+}
+
+.profile-card {
+  width: 100%;
+  max-width: 420px;
+  background: var(--card);
+  border-radius: 28px;
+  padding: 22px;
   text-align: center;
-  position: relative;
-  animation: card-in 0.5s ease both;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
 }
 
-@keyframes card-in {
-  from {
-    opacity: 0;
-    transform: translateY(12px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.top-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
 }
 
-.avatar-wrap {
-  width: 108px;
-  height: 108px;
+.top-actions button {
+  border: none;
+  background: var(--primary);
+  color: white;
+  padding: 9px 14px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.profile-image {
+  width: 125px;
+  height: 125px;
   border-radius: 50%;
-  padding: 4px;
-  background: linear-gradient(135deg, var(--whatsapp), var(--instapay));
-  margin-bottom: 20px;
-}
-
-.avatar {
-  width: 100%;
-  height: 100%;
   object-fit: cover;
-  border-radius: 50%;
-  border: 3px solid #fff;
-  display: block;
-  background: var(--border);
+  border: 4px solid var(--primary);
+  margin-bottom: 18px;
 }
 
-.name {
-  font-size: 22px;
-  font-weight: 700;
-  margin: 0 0 4px;
-  letter-spacing: -0.01em;
+h1 {
+  color: var(--text);
+  font-size: 26px;
+  margin-bottom: 6px;
 }
 
-.job {
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--text-secondary);
-  margin: 0 0 28px;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
+p {
+  color: var(--muted);
+  font-size: 15px;
+  margin-bottom: 22px;
 }
 
-.actions {
-  width: 100%;
+.buttons {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 12px;
 }
 
 .btn {
-  width: 100%;
-  border: none;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  padding: 16px 20px;
-  font-size: 16px;
-  font-weight: 600;
-  font-family: inherit;
-  border-radius: var(--radius-md);
+  display: block;
+  text-decoration: none;
   color: #fff;
-  transition: transform 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease, background-image 0.18s ease;
+  background: var(--primary);
+  padding: 15px;
+  border-radius: 16px;
+  font-size: 17px;
+  font-weight: bold;
+  transition: 0.3s;
 }
 
-.btn:active {
-  transform: scale(0.97);
+.btn:hover {
+  transform: translateY(-3px);
+  opacity: 0.9;
 }
 
-.icon {
-  width: 22px;
-  height: 22px;
-  flex-shrink: 0;
+.qr-box {
+  margin-top: 25px;
+  padding: 15px;
+  border-radius: 18px;
+  background: rgba(0, 0, 0, 0.05);
 }
 
-.btn-whatsapp {
-  background: var(--whatsapp);
-  box-shadow: 0 8px 20px rgba(37, 211, 102, 0.28);
-}
-.btn-whatsapp:hover {
-  background: var(--whatsapp-dark);
-  box-shadow: 0 10px 24px rgba(37, 211, 102, 0.36);
-  transform: translateY(-2px);
+body.dark .qr-box {
+  background: rgba(255, 255, 255, 0.08);
 }
 
-.btn-instapay {
-  background: var(--instapay);
-  box-shadow: 0 8px 20px rgba(108, 71, 255, 0.28);
-}
-.btn-instapay:hover {
-  background: var(--instapay-dark);
-  box-shadow: 0 10px 24px rgba(108, 71, 255, 0.36);
-  transform: translateY(-2px);
+.qr-box img {
+  width: 160px;
+  height: 160px;
+  margin-top: 10px;
 }
 
-.btn-facebook {
-  background: var(--facebook);
-  box-shadow: 0 8px 20px rgba(24, 119, 242, 0.28);
-}
-.btn-facebook:hover {
-  background: var(--facebook-dark);
-  box-shadow: 0 10px 24px rgba(24, 119, 242, 0.36);
-  transform: translateY(-2px);
-}
-
-.btn-instagram {
-  background: linear-gradient(135deg, var(--instagram-1), var(--instagram-2), var(--instagram-3), var(--instagram-4));
-  box-shadow: 0 8px 20px rgba(221, 42, 123, 0.28);
-}
-.btn-instagram:hover {
-  box-shadow: 0 10px 24px rgba(221, 42, 123, 0.4);
-  transform: translateY(-2px);
-  filter: brightness(1.06);
-}
-
-.btn-tiktok {
-  background: var(--tiktok);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.22);
-  position: relative;
-}
-.btn-tiktok:hover {
-  background: var(--tiktok-dark);
-  box-shadow: 0 10px 24px rgba(37, 244, 238, 0.28), 0 10px 24px rgba(254, 44, 85, 0.2);
-  transform: translateY(-2px);
-}
-
-.btn-x {
-  background: var(--x);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.22);
-}
-.btn-x:hover {
-  background: var(--x-dark);
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.3);
-  transform: translateY(-2px);
-}
-
-.footer {
-  margin-top: 22px;
-  font-size: 12px;
-  color: var(--text-secondary);
-  letter-spacing: 0.02em;
-}
-
-.toast {
-  position: absolute;
-  bottom: -14px;
-  left: 50%;
-  transform: translateX(-50%) translateY(10px);
-  background: var(--text-primary);
-  color: #fff;
+footer {
+  margin-top: 25px;
+  color: var(--muted);
   font-size: 13px;
-  font-weight: 500;
-  padding: 8px 16px;
-  border-radius: 999px;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.25s ease, transform 0.25s ease;
-  white-space: nowrap;
-}
-
-.toast.show {
-  opacity: 1;
-  transform: translateX(-50%) translateY(24px);
-}
-
-@media (max-width: 400px) {
-  .card {
-    padding: 32px 20px 26px;
-    border-radius: 22px;
-  }
-  .btn {
-    font-size: 15px;
-    padding: 14px 16px;
-  }
 }
