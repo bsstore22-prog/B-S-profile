@@ -1,57 +1,38 @@
 "use strict";
 
-/*
-  Read the customer ID from the URL.
+const params = new URLSearchParams(window.location.search);
 
-  Example:
-  ?id=bsstore
-*/
+const customerId = params.get("id") || "sample";
 
-const urlParameters = new URLSearchParams(window.location.search);
-const customerId = urlParameters.get("id") || "bsstore";
-
-/*
-  Get page elements.
-*/
-
-const loadingMessage = document.getElementById("loadingMessage");
+const loading = document.getElementById("loading");
 const profileContent = document.getElementById("profileContent");
 const errorMessage = document.getElementById("errorMessage");
 
-const profileImage = document.getElementById("profileImage");
-const customerName = document.getElementById("customerName");
-const customerJob = document.getElementById("customerJob");
+const darkModeBtn = document.getElementById("darkModeBtn");
 
-const darkModeButton = document.getElementById("darkModeButton");
-
-const buttons = {
-  whatsapp: document.getElementById("whatsappButton"),
-  instapay: document.getElementById("instapayButton"),
-  facebook: document.getElementById("facebookButton"),
-  instagram: document.getElementById("instagramButton"),
-  tiktok: document.getElementById("tiktokButton"),
-  x: document.getElementById("xButton"),
-  maps: document.getElementById("mapsButton")
+const elements = {
+  image: document.getElementById("profileImage"),
+  name: document.getElementById("customerName"),
+  job: document.getElementById("customerJob")
 };
 
-/*
-  Check that a link is valid.
-*/
+const buttons = {
+  whatsapp: document.getElementById("whatsappBtn"),
+  instapay: document.getElementById("instapayBtn"),
+  facebook: document.getElementById("facebookBtn"),
+  instagram: document.getElementById("instagramBtn"),
+  tiktok: document.getElementById("tiktokBtn"),
+  x: document.getElementById("xBtn"),
+  maps: document.getElementById("mapsBtn")
+};
 
 function isValidLink(link) {
   return (
     typeof link === "string" &&
     link.trim() !== "" &&
-    link.trim() !== "#"
+    link.startsWith("https://")
   );
 }
-
-/*
-  Add a link to a button.
-
-  If the customer does not have this link,
-  the button will be hidden.
-*/
 
 function configureButton(button, link) {
   if (isValidLink(link)) {
@@ -63,56 +44,19 @@ function configureButton(button, link) {
   }
 }
 
-/*
-  Display customer information.
-*/
-
 function displayCustomer(customer) {
-  if (!customer || !customer.name) {
-    throw new Error("Invalid customer data.");
-  }
+  elements.name.textContent = customer.name || "";
+  elements.job.textContent = customer.job || "";
 
-  customerName.textContent = customer.name;
-  customerJob.textContent = customer.job || "";
+  elements.image.src = customer.image || "images/default.jpg";
+  elements.image.alt = `${customer.name || "Customer"} profile picture`;
 
-  /*
-    Display or hide the profile picture.
-  */
-
-  if (customer.image && customer.image.trim() !== "") {
-    profileImage.src = customer.image;
-    profileImage.alt = `${customer.name} profile picture`;
-    profileImage.classList.remove("hidden");
-  } else {
-    profileImage.classList.add("hidden");
-  }
-
-  /*
-    Apply the customer's theme color.
-  */
-
-  const themeColor = customer.themeColor || "#5b2cff";
+  const themeColor = customer.themeColor || "#111111";
 
   document.documentElement.style.setProperty(
     "--primary-color",
     themeColor
   );
-
-  /*
-    Update the browser theme color.
-  */
-
-  const themeMetaTag = document.querySelector(
-    'meta[name="theme-color"]'
-  );
-
-  if (themeMetaTag) {
-    themeMetaTag.setAttribute("content", themeColor);
-  }
-
-  /*
-    Configure all customer buttons.
-  */
 
   configureButton(buttons.whatsapp, customer.whatsapp);
   configureButton(buttons.instapay, customer.instapay);
@@ -122,39 +66,28 @@ function displayCustomer(customer) {
   configureButton(buttons.x, customer.x);
   configureButton(buttons.maps, customer.maps);
 
-  loadingMessage.classList.add("hidden");
+  loading.classList.add("hidden");
   errorMessage.classList.add("hidden");
   profileContent.classList.remove("hidden");
 }
 
-/*
-  Display an error if the profile does not exist.
-*/
-
-function displayError(error) {
+function showError(error) {
   console.error(error);
 
-  loadingMessage.classList.add("hidden");
+  loading.classList.add("hidden");
   profileContent.classList.add("hidden");
   errorMessage.classList.remove("hidden");
 }
 
-/*
-  Load the customer's JSON file.
-*/
-
 async function loadCustomer() {
   try {
     const response = await fetch(
-      `data/${encodeURIComponent(customerId)}.json`,
-      {
-        cache: "no-store"
-      }
+      `data/${encodeURIComponent(customerId)}.json?v=${Date.now()}`
     );
 
     if (!response.ok) {
       throw new Error(
-        `Customer file was not found. Status: ${response.status}`
+        `Customer file not found. Status: ${response.status}`
       );
     }
 
@@ -162,71 +95,38 @@ async function loadCustomer() {
 
     displayCustomer(customer);
   } catch (error) {
-    displayError(error);
+    showError(error);
   }
 }
 
-/*
-  Dark Mode.
-*/
-
 function enableDarkMode() {
   document.body.classList.add("dark-mode");
-  darkModeButton.textContent = "☀️";
-  localStorage.setItem("onetapDarkMode", "enabled");
+  darkModeBtn.textContent = "☀️";
+  localStorage.setItem("bsDarkMode", "enabled");
 }
 
 function disableDarkMode() {
   document.body.classList.remove("dark-mode");
-  darkModeButton.textContent = "🌙";
-  localStorage.setItem("onetapDarkMode", "disabled");
+  darkModeBtn.textContent = "🌙";
+  localStorage.setItem("bsDarkMode", "disabled");
 }
 
-function loadDarkModePreference() {
-  const savedMode = localStorage.getItem("onetapDarkMode");
-
-  if (savedMode === "enabled") {
-    enableDarkMode();
-    return;
-  }
-
-  disableDarkMode();
-}
-
-darkModeButton.addEventListener("click", () => {
-  const darkModeIsActive =
-    document.body.classList.contains("dark-mode");
-
-  if (darkModeIsActive) {
+darkModeBtn.addEventListener("click", () => {
+  if (document.body.classList.contains("dark-mode")) {
     disableDarkMode();
   } else {
     enableDarkMode();
   }
 });
 
-/*
-  Show a fallback if the customer image fails.
-*/
-
-profileImage.addEventListener("error", () => {
-  profileImage.src =
-    "data:image/svg+xml;charset=UTF-8," +
-    encodeURIComponent(`
-      <svg xmlns="http://www.w3.org/2000/svg"
-           width="300"
-           height="300"
-           viewBox="0 0 300 300">
-        <rect width="300" height="300" fill="#eeeeee"/>
-        <circle cx="150" cy="110" r="55" fill="#aaaaaa"/>
-        <path d="M55 275c10-70 50-100 95-100s85 30 95 100"
-              fill="#aaaaaa"/>
-      </svg>
-    `);
+elements.image.addEventListener("error", () => {
+  elements.image.src = "images/default.jpg";
 });
 
-/*
-  Start the page.
-*/
+if (localStorage.getItem("bsDarkMode") === "enabled") {
+  enableDarkMode();
+} else {
+  disableDarkMode();
+}
 
-loadDarkModePreference();
 loadCustomer();
