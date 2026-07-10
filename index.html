@@ -1,59 +1,55 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
 
   <meta
     name="viewport"
     content="width=device-width, initial-scale=1.0"
-  >
+  />
 
-  <meta name="theme-color" content="#ffffff">
+  <meta name="theme-color" content="#111111" />
 
-  <title>OneTap NFC Profile</title>
+  <title>B&S Digital Profile</title>
 
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css" />
 </head>
 
 <body>
 
-  <main id="profileCard" class="profile-card">
+  <main class="profile-card">
 
-    <!-- Dark Mode button -->
     <button
-      id="darkModeButton"
-      class="dark-mode-button"
+      id="darkModeBtn"
+      class="dark-mode-btn"
       type="button"
       aria-label="Toggle dark mode"
     >
       🌙
     </button>
 
-    <!-- Loading message -->
-    <div id="loadingMessage" class="loading-message">
+    <div id="loading" class="status-message">
       Loading profile...
     </div>
 
-    <!-- Profile content -->
-    <section id="profileContent" class="profile-content hidden">
+    <section id="profileContent" class="hidden">
 
       <img
         id="profileImage"
         class="profile-image"
-        src=""
+        src="images/default.jpg"
         alt="Customer profile picture"
-      >
+      />
 
       <h1 id="customerName"></h1>
 
       <p id="customerJob" class="customer-job"></p>
 
-      <div class="buttons-container">
+      <div class="buttons">
 
         <a
-          id="whatsappButton"
-          class="profile-button whatsapp-button"
-          href="#"
+          id="whatsappBtn"
+          class="profile-btn"
           target="_blank"
           rel="noopener noreferrer"
         >
@@ -61,9 +57,8 @@
         </a>
 
         <a
-          id="instapayButton"
-          class="profile-button instapay-button"
-          href="#"
+          id="instapayBtn"
+          class="profile-btn"
           target="_blank"
           rel="noopener noreferrer"
         >
@@ -71,9 +66,8 @@
         </a>
 
         <a
-          id="facebookButton"
-          class="profile-button facebook-button"
-          href="#"
+          id="facebookBtn"
+          class="profile-btn"
           target="_blank"
           rel="noopener noreferrer"
         >
@@ -81,9 +75,8 @@
         </a>
 
         <a
-          id="instagramButton"
-          class="profile-button instagram-button"
-          href="#"
+          id="instagramBtn"
+          class="profile-btn"
           target="_blank"
           rel="noopener noreferrer"
         >
@@ -91,9 +84,8 @@
         </a>
 
         <a
-          id="tiktokButton"
-          class="profile-button tiktok-button"
-          href="#"
+          id="tiktokBtn"
+          class="profile-btn"
           target="_blank"
           rel="noopener noreferrer"
         >
@@ -101,9 +93,8 @@
         </a>
 
         <a
-          id="xButton"
-          class="profile-button x-button"
-          href="#"
+          id="xBtn"
+          class="profile-btn"
           target="_blank"
           rel="noopener noreferrer"
         >
@@ -111,9 +102,8 @@
         </a>
 
         <a
-          id="mapsButton"
-          class="profile-button maps-button"
-          href="#"
+          id="mapsBtn"
+          class="profile-btn"
           target="_blank"
           rel="noopener noreferrer"
         >
@@ -123,13 +113,12 @@
       </div>
 
       <footer>
-        Powered by <strong>OneTap</strong>
+        Powered by <strong>B&S</strong>
       </footer>
 
     </section>
 
-    <!-- Error message -->
-    <section id="errorMessage" class="error-message hidden">
+    <section id="errorMessage" class="status-message hidden">
       <h2>Profile Not Found</h2>
       <p>Please check the customer link.</p>
     </section>
